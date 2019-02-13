@@ -1,7 +1,11 @@
+use std::collections::HashSet;
+use super::cell::Cell;
+
+type Cells = HashSet<Cell>;
 
 #[derive(Debug)]
 pub struct Board {
-    cells: Vec<(usize,usize)>,
+    cells: Cells,
     width: usize,
     height: usize
 }
@@ -12,7 +16,7 @@ impl Board {
         if grid.is_empty() {
             panic!("Grid cannot be empty");
         } else {
-            let mut cells:Vec<(usize, usize)> = Vec::new();
+            let mut cells:Cells = HashSet::new();
             let mut width = 0;
             let mut height = 0;
 
@@ -21,7 +25,7 @@ impl Board {
                 for (x, token) in line.trim().split(" ").enumerate() {
                     width = x + 1;
                     if token == "*" {
-                        cells.push((x,y))
+                        cells.insert(Cell::new(y, x));
                     }
                 }
             }
@@ -31,7 +35,7 @@ impl Board {
     }
 
     pub fn empty() -> Board {
-        Board { cells: Vec::new(), height:0, width:0 }
+        Board { cells: HashSet::new(), height:0, width:0 }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -46,7 +50,7 @@ impl Board {
         self.width
     }
 
-    pub fn cells(&self) -> &Vec<(usize, usize)> {
+    pub fn cells(&self) -> &Cells {
         &self.cells
     }
 }
@@ -92,14 +96,14 @@ mod tests {
     fn a_grid_with_single_cell() {
         let grid = ". * .\n. . .";
         let board = Board::new(grid);
-        assert_eq!(board.cells(), &vec![(1, 0)])
+        assert_eq!(board.cells(), &vec![Cell::new(0,1)].into_iter().collect());
     }
 
     #[test]
     fn leading_and_trailing_spaces_are_ignored() {
         let grid = "      . .    \n     . *     \n     . .   ";
         let board  = Board::new(grid);
-        assert_eq!(board.cells(), &vec![(1, 1)]);
+        assert_eq!(board.cells(), &vec![Cell::new(1,1)].into_iter().collect());
         assert_eq!(board.width(), 2);
         assert_eq!(board.height(), 3);
     }
@@ -116,7 +120,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn a_grid_with_all_cells() {
         let grid = r"
             * * *
@@ -125,7 +128,12 @@ mod tests {
         let board = Board::new(grid);
         assert_eq!(board.width(), 3);
         assert_eq!(board.height(), 2);
-        assert_eq!(board.cells(), &vec![(0,0), (0,1), (1,0), (1,1), (2,0), (2,1)])
+        let expected: Cells = (0..=1).into_iter().flat_map(|r| {
+            (0..=2).into_iter().map(move |c| {
+                Cell::new(r, c)
+            })
+        }).collect();
+        assert_eq!(board.cells(), &expected);
     }
 
 }
