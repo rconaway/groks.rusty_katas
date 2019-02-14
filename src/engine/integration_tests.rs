@@ -1,38 +1,38 @@
 #[cfg(test)]
 
-    use super::board::Board;
-    use super::life::Life;
+    use super::board::*;
+    use super::life;
+    use super::life::tests;
 
-    #[ignore]
     #[test]
     fn glider() {
-        let glider1 = Board::new(r". . . . .
+        let glider1 = from_grid(r". . . . .
                                   . * . * .
                                   . . * * .
                                   . . * . .
                                   . . . . .");
 
-        let glider2 = Board::new(r". . . . .
+        let glider2 = from_grid(r". . . . .
                                   . . . * .
                                   . * . * .
                                   . . * * .
                                   . . . . .");
 
-        let glider3 = Board::new(r". . . . .
+        let glider3 = from_grid(r". . . . .
                                   . . * . .
                                   . . . * *
                                   . . * * .
                                   . . . . .");
 
-        let glider4 = Board::new(r". . . . .
+        let glider4 = from_grid(r". . . . .
                                   . . . * .
                                   . . . . *
                                   . . * * *
                                   . . . . .");
 
         
-        assert_eq!(Life::evolve(glider1), glider2);
-        assert_eq!(Life::evolve(glider2), glider3);
-        assert_eq!(Life::evolve(glider3), glider4);
+        assert_eq!(life::evolve(&glider1), glider2);
+        assert_eq!(life::evolve(&glider2), glider3);
+        assert_eq!(life::evolve(&glider3), glider4);
     }
 
