@@ -1,5 +1,5 @@
 [package]
-name = "rusty_life"
+name = "rusty_katas"
 version = "0.1.0"
 authors = ["Rob Conaway <rconaway@pillartechnology.com>"]
 edition = "2018"
