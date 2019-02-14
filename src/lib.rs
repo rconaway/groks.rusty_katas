@@ -1,4 +1,4 @@
 #[deny(warnings)]
-pub mod life;
+pub mod life_functional;
 
 
